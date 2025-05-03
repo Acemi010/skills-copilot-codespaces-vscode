@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sohbet Sitesi</title>
+
+  <!-- CSS Stiller -->
+  <style>
+    /* Genel Stiller */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f5f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Sohbet Alanı */
+    .chat-container {
+      width: 100%;
+      max-width: 400px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 12px;
+    }
+
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .chat-box div {
+      margin-bottom: 12px;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .chat-box .user-message {
+      background-color: #e3f7e0;
+      text-align: left;
+    }
+
+    .chat-box .bot-message {
+      background-color: #d4f1ff;
+      text-align: right;
+    }
+
+    .chat-input {
+      padding: 10px;
+    }
+
+    .chat-input input,
+    .chat-input textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .chat-input button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background-color: #45a049;
+    }
+
+    /* Responsive Tasarım */
+    @media (max-width: 500px) {
+      .chat-container {
+        width: 95%;
+        padding: 10px;
+      }
+
+      .chat-box {
+        height: 250px;
+      }
+
+      .chat-input button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Sohbet Odası</h2>
+    </div>
+    <div class="chat-box" id="chatBox">
+      <!-- Sohbet mesajları burada görünecek -->
+    </div>
+    <div class="chat-input">
+      <input type="text" id="username" placeholder="Adınızı girin..." />
+      <textarea id="message" placeholder="Mesajınızı yazın..." rows="3"></textarea>
+      <button onclick="sendMessage()">Gönder</button>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Sohbet penceresini güncelleyen fonksiyon
+    function updateChatBox(message, sender) {
+      const chatBox = document.getElementById('chatBox');
+      const newMessage = document.createElement('div');
+      
+      // Mesaj türüne göre sağa veya sola hizalama
+      newMessage.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+      
+      newMessage.textContent = message;
+      chatBox.appendChild(newMessage);
+
+      // Sohbeti en son mesaja kaydır
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Mesaj gönderme fonksiyonu
+    function sendMessage() {
+      const usernameInput = document.getElementById('username');
+      const messageInput = document.getElementById('message');
+
+      const username = usernameInput.value.trim();
+      const message = messageInput.value.trim();
+
+      // Kullanıcı adı ve mesaj kontrolü
+      if (!username || !message) {
+        alert('Lütfen kullanıcı adı ve mesaj girin!');
+        return;
+      }
+
+      // Kullanıcının mesajını ekle
+      updateChatBox(`${username}: ${message}`, 'user');
+
+      // Botun yanıtını simüle et (basit bir yanıt)
+      setTimeout(() => {
+        updateChatBox(`Bot: ${generateBotResponse()}`, 'bot');
+      }, 1000);
+
+      // Mesajı temizle
+      messageInput.value = '';
+    }
+
+    // Bot için basit yanıt generator fonksiyonu
+    function generateBotResponse() {
+      const responses = [
+        "Merhaba! Size nasıl yardımcı olabilirim?",
+        "Bugün hava çok güzel, değil mi?",
+        "Bu sohbet çok eğlenceli!",
+        "Bunun hakkında daha fazla bilgi verebilir miyim?",
+        "Nasıl yardımcı olabilirim?"
+      ];
+      
+      return responses[Math.floor(Math.random() * responses.length)];
+    }
+  </script>
+</body>
+</html>
